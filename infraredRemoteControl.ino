@@ -15,7 +15,7 @@
 #define COLOR_GREEN 0xFF10EF
 #define COLOR_BLUE 0xFF50AF
 #define COLOR_WHITE 0xFFD02F
-unsigned long output;
+//unsigned long output;
 
 IRrecv receiver(11);
 IRsend sender;
@@ -24,6 +24,7 @@ IRdecode decoder;
 void setup() {
   Serial.begin(9600);
   receiver.enableIRIn(); // Start receiver
+  Serial.println("SMOKO Unicorn Controller. Type 'H' for help.\n");
 }
  
 void loop() {
@@ -36,38 +37,56 @@ void loop() {
   char input = Serial.read();
   switch(input){
     case '1':
-      output = BUTTON_ON;
-      Serial.println("Power ON");
+      sender.send(NEC, BUTTON_ON, 20);
+      Serial.println("Command Executed: Power ON");
       break;
     case '0':
-      output = BUTTON_OFF;
-      Serial.println("Power OFF");
+      sender.send(NEC, BUTTON_OFF, 20);
+      Serial.println("Command Executed: Power OFF");
       break;
-    case '>':
-      output = BRIGHT_UP;
-      Serial.println("Brightness Up");
+    case '+':
+      sender.send(NEC, BRIGHT_UP, 20);
+      Serial.println("Command Executed: Brightness Up");
       break;
-    case '<':
-      output = BRIGHT_DOWN;
-      Serial.println("Brightness Down");
+    case '-':
+      sender.send(NEC, BRIGHT_DOWN, 20);
+      Serial.println("Command Executed: Brightness Down");
       break;
+    case 'R':
     case 'r':
-      output = COLOR_RED;
-      Serial.println("Lamp Color: RED");
+      sender.send(NEC, COLOR_RED, 20);
+      Serial.println("Command Executed: Lamp Color: RED");
       break;
-    case 'b':
-      output = COLOR_BLUE;
-      Serial.println("Lamp Color: BLUE");
-      break;
+    case 'G':
     case 'g':
-      output = COLOR_GREEN;
-      Serial.println("Lamp Color: GREEN");
+      sender.send(NEC, COLOR_GREEN, 20);
+      Serial.println("Command Executed: Lamp Color: GREEN");
       break;
+    case 'B':
+    case 'b':
+      sender.send(NEC, COLOR_BLUE, 20);
+      Serial.println("Command Executed: Lamp Color: BLUE");
+      break;
+    case 'W':
     case 'w':
-      output = COLOR_WHITE;
-      Serial.println("Lamp Color: WHITE");
+      sender.send(NEC, COLOR_WHITE, 20);
+      Serial.println("Command Executed: Lamp Color: WHITE");
+      break;
+     case 'H':
+     case 'h':
+     Serial.println("Command Executed: Help Menu");
+      Serial.println("\tCommand\t  Description");
+      Serial.println("\t-----------------------");
+      Serial.println("\t   1 \t  Turn lamp On");
+      Serial.println("\t   0 \t  Turn lamp Off");
+      Serial.println("\t   + \t  Brightness Up");
+      Serial.println("\t   - \t  Brightness Down");
+      Serial.println("\t   R \t  Color: Red");
+      Serial.println("\t   G \t  Color: GREEN");
+      Serial.println("\t   B \t  Color: BLUE");
+      Serial.println("\t   W \t  Color: WHITE");
+      Serial.println("\t-----------------------");
       break;
   }
-  sender.send(NEC, output, 20);
 }
 

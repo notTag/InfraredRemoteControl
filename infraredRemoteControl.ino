@@ -15,20 +15,19 @@
 #define COLOR_GREEN 0xFF10EF
 #define COLOR_BLUE 0xFF50AF
 #define COLOR_WHITE 0xFFD02F
-//SMOKO Extra Lamp Colors
-#define COLOR_LIGHT_RED 0xFFB04F
-#define COLOR_LIGHT_GREEN 0xFF30CF
 #define COLOR_PURPLE 0xFF708F
-#define COLOR_ORANGE 0xFFA857
-#define COLOR_TURQ 0xFF28D7
-#define COLOR_DARK_BLUE 0xFF6897
-#define COLOR_LIGHT_ORANGE 0xFF9867
-#define COLOR_LIGHT_TURQ 0xFF18E7
-#define COLOR_DARKER_BLUE 0xFF58A7
-#define COLOR_YELLOW 0xFF8877
-#define COLOR_LIGHT_BLUE 0xFF08F7
-#define COLOR_PINK 0xFF48B7
-//unsigned long output;
+//SMOKO Extra Lamp Colors
+//#define COLOR_LIGHT_RED 0xFFB04F
+//#define COLOR_LIGHT_GREEN 0xFF30CF
+//#define COLOR_ORANGE 0xFFA857
+//#define COLOR_TURQ 0xFF28D7
+//#define COLOR_DARK_BLUE 0xFF6897
+//#define COLOR_LIGHT_ORANGE 0xFF9867
+//#define COLOR_LIGHT_TURQ 0xFF18E7
+//#define COLOR_DARKER_BLUE 0xFF58A7
+//#define COLOR_YELLOW 0xFF8877
+//#define COLOR_LIGHT_BLUE 0xFF08F7
+//#define COLOR_PINK 0xFF48B7
 
 IRrecv receiver(11);
 IRsend sender;
@@ -43,7 +42,6 @@ void setup() {
 void loop() {
   //Uncomment below to receive data from infrared remote.
   //  if (receiver.GetResults(&decoder)) {
-  //    Serial.print("here");
   //    decoder.decode();    //Decode the data
   //    decoder.DumpResults(); //output to serial monitor
   //    receiver.resume();     //Restart the receiver
@@ -86,6 +84,11 @@ void loop() {
       sender.send(NEC, COLOR_WHITE, 20);
       Serial.println("Command Executed: Lamp Color: WHITE");
       break;
+    case 'P':
+    case 'p':
+      sender.send(NEC, COLOR_PURPLE, 20);
+      Serial.println("Command Executed: Lamp Color: PURPLE");
+      break;
     case 'F':
     case 'f':
       sender.send(NEC, BUTTON_FLASH, 20);
@@ -109,21 +112,22 @@ void loop() {
     case 'H':
     case 'h':
       Serial.println("Command Executed: Help Menu");
-      Serial.println("\tCommand\t  Description");
-      Serial.println("\t-----------------------");
-      Serial.println("\t   1 \t  Turn lamp On");
-      Serial.println("\t   0 \t  Turn lamp Off");
-      Serial.println("\t   + \t  Brightness Up");
-      Serial.println("\t   - \t  Brightness Down");
-      Serial.println("\t   F \t  Transition: Flash");
-      Serial.println("\t   T \t  Transition: Strobe");
-      Serial.println("\t   A \t  Transition: Fade");
-      Serial.println("\t   S \t  Transition: Smooth");
-      Serial.println("\t   R \t  Color: Red");
-      Serial.println("\t   G \t  Color: GREEN");
-      Serial.println("\t   B \t  Color: BLUE");
-      Serial.println("\t   W \t  Color: WHITE");
-      Serial.println("\t-----------------------");
+      Serial.println("-----------------------");
+      Serial.println("Command\t  Description");
+      Serial.println("   1 \t  Turn lamp On");
+      Serial.println("   0 \t  Turn lamp Off");
+      Serial.println("   + \t  Brightness Up");
+      Serial.println("   - \t  Brightness Down");
+      Serial.println("   R \t  Color: Red");
+      Serial.println("   G \t  Color: GREEN");
+      Serial.println("   B \t  Color: BLUE");
+      Serial.println("   W \t  Color: WHITE");
+      Serial.println("   P \t  Color: PURPLE");
+      Serial.println("   F \t  Transition: Flash");
+      Serial.println("   T \t  Transition: Strobe");
+      Serial.println("   A \t  Transition: Fade");
+      Serial.println("   S \t  Transition: Smooth");
+      Serial.println("-----------------------");
       break;
   }
 }

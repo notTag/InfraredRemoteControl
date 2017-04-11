@@ -19,7 +19,7 @@
 //SMOKO Extra Lamp Colors
 //#define COLOR_LIGHT_RED 0xFFB04F
 //#define COLOR_LIGHT_GREEN 0xFF30CF
-//#define COLOR_ORANGE 0xFFA857
+#define COLOR_ORANGE 0xFFA857
 //#define COLOR_TURQ 0xFF28D7
 //#define COLOR_DARK_BLUE 0xFF6897
 //#define COLOR_LIGHT_ORANGE 0xFF9867
@@ -42,7 +42,7 @@ void setup() {
 void loop() {
   //Uncomment below to receive data from infrared remote.
   //  if (receiver.GetResults(&decoder)) {
-  //    decoder.decode();    //Decode the data
+  //    decoder.decode();      //Decode the data
   //    decoder.DumpResults(); //output to serial monitor
   //    receiver.resume();     //Restart the receiver
   //  }
@@ -89,6 +89,11 @@ void loop() {
       sender.send(NEC, COLOR_PURPLE, 20);
       Serial.println("Command Executed: Lamp Color: PURPLE");
       break;
+    case 'O':
+    case 'o':
+      sender.send(NEC, COLOR_ORANGE, 20);
+      Serial.println("Command Executed: Lamp Color: ORANGE");
+      break;
     case 'F':
     case 'f':
       sender.send(NEC, BUTTON_FLASH, 20);
@@ -123,6 +128,7 @@ void loop() {
       Serial.println("   B \t  Color: BLUE");
       Serial.println("   W \t  Color: WHITE");
       Serial.println("   P \t  Color: PURPLE");
+      Serial.println("   O \t  Color: Orange");
       Serial.println("   F \t  Transition: Flash");
       Serial.println("   T \t  Transition: Strobe");
       Serial.println("   A \t  Transition: Fade");

@@ -55,6 +55,7 @@ void loop() {
     case '0':
       sender.send(NEC, BUTTON_OFF, 20);
       Serial.println(F("Command Executed: Power OFF"));
+      getIRValues();
       break;
     case '+':
       sender.send(NEC, BRIGHT_UP, 20);
@@ -117,7 +118,7 @@ void loop() {
     case 'H':
     case 'h':
       Serial.println(F("Command Executed: Help Menu"));
-      Serial.println(F("-----------------------"));
+      Serial.println(F("------------------------------"));
       Serial.println(F("Command\t  Description"));
       Serial.println(F("   1 \t  Turn lamp On"));
       Serial.println(F("   0 \t  Turn lamp Off"));
@@ -133,10 +134,36 @@ void loop() {
       Serial.println(F("   T \t  Transition: Strobe"));
       Serial.println(F("   A \t  Transition: Fade"));
       Serial.println(F("   S \t  Transition: Smooth"));
-      Serial.println(F("-----------------------"));
+      Serial.println(F("NOTE: To record a value send the off command (0) and then begin testing with an IR Remote."));
+      Serial.println(F("-----------------------------"));
       break;
     default:
+      receiver.No_Output(); //ensures that output pin is set to low (recommended by documentation for safety to the circuit)
       break;
   }
+}
+
+void getIRValues(){
+  Serial.println(F("\nEntering receive mode."));
+  Serial.println(F("Awaiting input from IR Remote."));
+  
+  receiver.No_Output();
+  boolean decoderValue = true; //on button has been pressed
+  int input = 0;
+  receiver.enableIRIn(); // Re-enable receiver
+  while(decoderValue && input != 48){
+    input = Serial.read();
+    if (receiver.GetResults(&decoder)) {
+      decoder.decode();      //Decode the data
+      decoder.DumpResults(); //output to serial monitor
+      Serial.print(F("Value read: "));
+      if(decoder.value == BUTTON_OFF){
+          decoderValue = false;
+      }
+      receiver.resume();     //Restart the receiver
+      Serial.println(F("Exit: Press off button on remote or enter 0\n"));
+    }
+  }
+  Serial.println(F("\nExiting receive mode.\n\n"));
 }
 

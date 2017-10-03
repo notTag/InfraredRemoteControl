@@ -29,23 +29,32 @@
 //#define COLOR_LIGHT_BLUE 0xFF08F7
 //#define COLOR_PINK 0xFF48B7
 
+#include <BlynkApiArduino.h>
+#include <SoftwareSerial.h>
+SoftwareSerial DebugSerial(8,9); //Rx, Tx
+
+#define BLYNK_PRINT DebugSerial
+#include <BlynkSimpleStream.h>
+
+char auth[] = "bca7f3c4eee44a06a581b871db6f29cc";
+
 IRrecv receiver(11);
 IRsend sender;
 IRdecode decoder;
 
 void setup() {
+  DebugSerial.begin(9600);
   Serial.begin(9600);
+  Blynk.begin(auth, Serial);
   receiver.enableIRIn(); // Start receiver
   Serial.println(F("SMOKO Unicorn Controller. Type 'H' for help.\n"));
 }
 
 void loop() {
-  //Uncomment below to receive data from infrared remote.
-  //  if (receiver.GetResults(&decoder)) {
-  //    decoder.decode();      //Decode the data
-  //    decoder.DumpResults(); //output to serial monitor
-  //    receiver.resume();     //Restart the receiver
-  //  }
+    Blynk.run();
+}  
+
+BLYNK_WRITE(V0) {
   char input = Serial.read();
   switch (input) {
     case '1':
@@ -134,7 +143,7 @@ void loop() {
       Serial.println(F("   T \t  Transition: Strobe"));
       Serial.println(F("   A \t  Transition: Fade"));
       Serial.println(F("   S \t  Transition: Smooth"));
-      Serial.println(F("Turn lamp off to enter record mode. Begin testing with an IR Remote. To exit enter 0"));
+      Serial.println(F("NOTE: To record a value send the off command (0) and then begin testing with an IR Remote."));
       Serial.println(F("-----------------------------"));
       break;
     default:
